@@ -80,14 +80,27 @@ setInterval(() => {
   obstacles.push(obs);
 }, 1000);
 
+let animatedId = null
 function animate() {
-  requestAnimationFrame(animate);
+  animatedId = requestAnimationFrame(animate);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
   blueCar.draw();
   for (let obs of obstacles) {
     obs.move();
+    detectCollision(obs, blueCar)
   }
+}
+
+function detectCollision(rect1, rect2){
+  if (rect1.x < rect2.x + rect2.w &&
+    rect1.x + rect1.w > rect2.x &&
+    rect1.y < rect2.y + rect2.h &&
+    rect1.y + rect1.h > rect2.y) {
+    // collision detected!
+    console.log("collision")
+    cancelAnimationFrame(animatedId)
+}
 }
 
 animate();
