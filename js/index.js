@@ -68,7 +68,7 @@ class Obstacle {
 }
 
 const obstacles = [];
-
+let counter = 0;
 setInterval(() => {
   let obs = new Obstacle(
     Math.random() * canvas.width,
@@ -80,7 +80,7 @@ setInterval(() => {
   obstacles.push(obs);
 }, 1000);
 
-let animatedId = null
+let animatedId = null;
 function animate() {
   animatedId = requestAnimationFrame(animate);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -88,19 +88,27 @@ function animate() {
   blueCar.draw();
   for (let obs of obstacles) {
     obs.move();
-    detectCollision(obs, blueCar)
+    detectCollision(obs, blueCar);
+  }
+  ctx.fillText(counter, 10, 50);
+}
+
+function detectCollision(rect1, rect2) {
+  if (
+    rect1.x < rect2.x + rect2.w &&
+    rect1.x + rect1.w > rect2.x &&
+    rect1.y < rect2.y + rect2.h &&
+    rect1.y + rect1.h > rect2.y
+  ) {
+    // collision detected!
+    console.log("collision");
+    cancelAnimationFrame(animatedId);
+  } else {
+    counter += 100;
+    console.log(counter);
   }
 }
 
-function detectCollision(rect1, rect2){
-  if (rect1.x < rect2.x + rect2.w &&
-    rect1.x + rect1.w > rect2.x &&
-    rect1.y < rect2.y + rect2.h &&
-    rect1.y + rect1.h > rect2.y) {
-    // collision detected!
-    console.log("collision")
-    cancelAnimationFrame(animatedId)
-}
-}
+ctx.font = "48px serif";
 
 animate();
